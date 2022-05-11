@@ -2,14 +2,13 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
-    public class GameManager : MonoBehaviour
+    public class InputManager : MonoBehaviour
     {
-        public static GameManager Instance;
+        public static InputManager Instance;
 
         private void Awake()
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
     }
 }
