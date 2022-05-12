@@ -1,20 +1,23 @@
+using Assets.Scripts.Common;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts.Platform
 {
+    [RequireComponent(typeof(PlatformCreator))]
     public class Platform : MonoBehaviour
     {
-        [SerializeField] private PlatformCreator platformCreator;
+        private PlatformCreator platformCreator;
         private List<PlatformItem> itemsList;
 
         public event Action Ready;
 
         public void Init()
         {
+            platformCreator = GetComponent<PlatformCreator>();
             itemsList = new List<PlatformItem>();
+
             var creatorTransform = platformCreator.transform;
             var itemsCount = creatorTransform.childCount;
 
@@ -28,19 +31,9 @@ namespace Assets.Scripts.Platform
             Ready?.Invoke();
         }
 
-        public PlatformItem GetRandomFreeItem()
+        public Area GetArea(Enums.AreaType type)
         {
-            if (itemsList == null || !itemsList.Any())
-            {
-                Debug.Log("");
-                return null;
-            }
-
-            var freeItems = itemsList.Where(i => i.IsFree).ToList();
-            var index = UnityEngine.Random.Range(0, freeItems.Count);
-            var item = freeItems[index];
-            item.IsFree = false;
-            return item;
+            return platformCreator.GetArea(type);
         }
     }
 }

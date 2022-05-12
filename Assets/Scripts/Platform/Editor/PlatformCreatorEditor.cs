@@ -10,9 +10,15 @@ namespace Assets.Scripts.Platform.Editor
         {
             DrawDefaultInspector();
             var creator = target as PlatformCreator;
-            if (GUILayout.Button("Create"))
+            
+            if (GUILayout.Button("Create Platform"))
             {
                 creator?.Create();
+            }
+
+            if (GUILayout.Button("Add Area"))
+            {
+                creator?.CreateArea();
             }
         }
     }

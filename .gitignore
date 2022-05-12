@@ -73,3 +73,8 @@ crashlytics-build.properties
 # .idea
 .idea
 ScreenData.xml
+*.log
+Logs/AssetImportWorker0.log
+Logs/shadercompiler-AssetImportWorker0.log
+Logs/shadercompiler-UnityShaderCompiler.exe0.log
+Logs/AssetImportWorker0.log

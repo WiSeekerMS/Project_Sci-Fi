@@ -1,6 +1,11 @@
+using Assets.Scripts.Common;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Assets.Scripts.Platform
 {
@@ -9,6 +14,9 @@ namespace Assets.Scripts.Platform
     {
         [SerializeField] private BoxCollider boxCollider;
         [SerializeField] private PlatformItem itemPrefab;
+        [SerializeField] private List<Area> areas;
+
+        [Header("> Platform Options <")]
         [SerializeField] private Vector2Int platformSize;
         [SerializeField, Range(0f, 1f)] private float itemSize = 1f;
 
@@ -36,6 +44,30 @@ namespace Assets.Scripts.Platform
 
             var list = CreatePlatform(startPosition);
             ResetPlatformParam(list);
+            areas.Clear();
+        }
+
+#if UNITY_EDITOR
+        public void CreateArea()
+        {
+            var items = new List<PlatformItem>();
+            var list = Selection.gameObjects.ToList();
+
+            foreach (var selectedObject in list)
+            {
+                var platformItem = selectedObject.GetComponent<PlatformItem>();
+                if (platformItem) items.Add(platformItem);
+            }
+
+            var area = new Area();
+            area.Init(items);
+            areas.Add(area);
+        }
+#endif
+
+        public Area GetArea(Enums.AreaType type)
+        {
+            return areas.Find(a => a.Type == type);
         }
 
         private void ResetPlatformParam(List<PlatformItem> itemsList)
@@ -80,6 +112,7 @@ namespace Assets.Scripts.Platform
                     };
 
                     var item = Instantiate(itemPrefab, transform);
+                    item.gameObject.isStatic = true;
                     item.transform.position = startPosition + offsetVector;
                     item.transform.localScale = Vector3.one * itemSize;
                     itemsList.Add(item);
