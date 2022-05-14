@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyMoveSpeed: 0
   EnemyFrequency: 0
-  amountBonuses: 0
+  startAmountBonuses: 10
+  maxAmountBonuses: 20
   amountObstacles: 0

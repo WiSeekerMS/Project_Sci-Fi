@@ -7,6 +7,8 @@ namespace Assets.Scripts
     public class CharacterController : MonoBehaviour
     {
         private NavMeshAgent agent;
+        private Vector3 targetPoint;
+        private bool isMoving;
 
         private void Start()
         {
@@ -16,7 +18,18 @@ namespace Assets.Scripts
 
         public void MoveToPoint(Vector3 point)
         {
-            agent.destination = point;
+            targetPoint = point;
+            agent.SetDestination(targetPoint);
+            isMoving = true;
+        }
+
+        private void Update()
+        {
+            if (isMoving && Vector3.Distance(targetPoint, transform.position) <= 0.5f)
+            {
+                isMoving = false;
+                agent.ResetPath();
+            }
         }
     }
 }

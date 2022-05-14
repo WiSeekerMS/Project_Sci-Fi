@@ -50,6 +50,7 @@ namespace Assets.Scripts.Platform
 #if UNITY_EDITOR
         public void CreateArea()
         {
+            return;
             var items = new List<PlatformItem>();
             var list = Selection.gameObjects.ToList();
 

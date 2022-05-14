@@ -1,3 +1,5 @@
+using Assets.Scripts.BaseClasses;
+using Assets.Scripts.Factories;
 using Assets.Scripts.SO;
 using UnityEngine;
 
@@ -9,6 +11,7 @@ namespace Assets.Scripts
         [SerializeField] private LevelInfo_SO levelInfo;
         [SerializeField] private LayerMask layerMask;
         [SerializeField] private CharacterController character;
+        [SerializeField] private BonusesFactory bonusesFactory;
         private InputManager inputManager;
 
         private void Awake()
@@ -27,9 +30,11 @@ namespace Assets.Scripts
         private void Start()
         {
             platform.Init();
+            bonusesFactory.Init(levelInfo.StartAmountBonuses, 
+                levelInfo.MaxAmountBonuses);
         }
 
-        public void ReturnToMainScene()
+        public void OnReturnToMainScene()
         {
             SceneLoader.Instance?.LoadScene("MainScene");
         }

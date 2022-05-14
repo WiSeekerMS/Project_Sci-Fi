@@ -25,7 +25,12 @@ namespace Assets.Scripts.Platform
             {
                 var child = creatorTransform.GetChild(i);
                 var item = child.GetComponent<PlatformItem>();
-                if (item) itemsList.Add(item);
+                
+                if (item)
+                {
+                    item.Init();
+                    itemsList.Add(item);
+                }
             }
 
             Ready?.Invoke();

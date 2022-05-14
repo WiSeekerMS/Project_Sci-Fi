@@ -6,7 +6,7 @@ namespace Assets.Scripts.Common
     {
         public enum AreaType
         {
-            EnemySpawn
+            EnemySpawn, BonusesSpawn
         }
     }
 }
