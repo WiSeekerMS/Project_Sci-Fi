@@ -1,4 +1,3 @@
-using Assets.Scripts.BaseClasses;
 using Assets.Scripts.Factories;
 using Assets.Scripts.SO;
 using UnityEngine;
@@ -31,7 +30,7 @@ namespace Assets.Scripts
         {
             platform.Init();
             bonusesFactory.Init(levelInfo.StartAmountBonuses, 
-                levelInfo.MaxAmountBonuses);
+                levelInfo.MaxAmountBonuses, levelInfo.SpawnBonusesTimeValues);
         }
 
         public void OnReturnToMainScene()

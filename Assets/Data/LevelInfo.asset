@@ -16,4 +16,5 @@ MonoBehaviour:
   EnemyFrequency: 0
   startAmountBonuses: 10
   maxAmountBonuses: 20
+  spawnBonusesTime: {x: 5, y: 10}
   amountObstacles: 0
