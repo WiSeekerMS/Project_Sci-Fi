@@ -24,7 +24,9 @@ namespace Assets.Scripts
 
         private void Awake()
         {
-            Instance = this;
+            if (Instance == null) Instance = this;
+            else Destroy(gameObject);
+
             touchController = new TouchControls();
         }
 

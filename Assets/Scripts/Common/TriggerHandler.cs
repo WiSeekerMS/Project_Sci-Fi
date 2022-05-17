@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Common
@@ -9,6 +10,8 @@ namespace Assets.Scripts.Common
         private Rigidbody rb;
         private Collider triggerCollider;
 
+        public event Action<Collider> EnterEvent;
+
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
@@ -19,6 +22,11 @@ namespace Assets.Scripts.Common
         {
             rb.useGravity = false;
             triggerCollider.isTrigger = true;
+        }
+
+        public void OnTriggerEnter(Collider other)
+        {
+            EnterEvent?.Invoke(other);
         }
     }
 }

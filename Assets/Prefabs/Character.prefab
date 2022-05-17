@@ -1553,6 +1553,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2a7e5d63629d204a87f96f315c62d91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  triggerHandler: {fileID: 6315704567457502385}
+  distanceToTarget: 0.5
 --- !u!195 &8018889372526302790
 NavMeshAgent:
   m_ObjectHideFlags: 0

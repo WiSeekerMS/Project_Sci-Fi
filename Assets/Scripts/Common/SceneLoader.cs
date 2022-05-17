@@ -1,3 +1,4 @@
+using Assets.Scripts.Common;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,12 +7,13 @@ namespace Assets.Scripts
 {
     public class SceneLoader : MonoBehaviour
     {
-        private Coroutine sceneLoadCoroutine;
         public static SceneLoader Instance;
+        private Coroutine sceneLoadCoroutine;
 
         private void Awake()
         {
-            Instance = this;
+            if (Instance == null)
+                Instance = this;
         }
 
         public void LoadScene(string sceneName)
@@ -29,6 +31,11 @@ namespace Assets.Scripts
             sceneLoadingOperation.allowSceneActivation = true;
             while (!sceneLoadingOperation.isDone)
                 yield return null;
+        }
+
+        public void ReturnToMainScene()
+        {
+            LoadScene(Enums.Scenes.MainScene.ToString());
         }
     }
 }
