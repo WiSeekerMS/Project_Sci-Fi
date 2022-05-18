@@ -14,11 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerHP: 5
   amountObstacles: 5
-  enemyMoveSpeed: 1.5
-  enemyAmount: 5
-  maxEnemyAmount: 7
-  spawnEnemyTime: {x: 10, y: 15}
-  amountPointsForPatrols: 15
+  enemyAmount: 3
+  maxEnemyAmount: 5
+  spawnEnemyTime: {x: 5, y: 10}
   startAmountBonuses: 5
   maxAmountBonuses: 10
-  spawnBonusesTime: {x: 5, y: 10}
+  spawnBonusesTime: {x: 3, y: 7}

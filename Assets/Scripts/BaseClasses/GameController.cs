@@ -39,7 +39,7 @@ namespace Assets.Scripts.BaseClasses
 
         private void RestartLevel()
         {
-
+            OnRestartLevel();
         }
 
         protected virtual void OnPlatformReady(){}

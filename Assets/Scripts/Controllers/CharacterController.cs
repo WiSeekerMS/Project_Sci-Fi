@@ -1,41 +1,52 @@
 using Assets.Scripts.Common;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Assets.Scripts.Controllers
 {
-    [RequireComponent(typeof(NavMeshAgent))]
+    [RequireComponent(typeof(Rigidbody))]
     public class CharacterController : MonoBehaviour
     {
+        [SerializeField] private CharacterAnimation animationController;
         [SerializeField] private TriggerHandler triggerHandler;
-        [SerializeField] private float distanceToTarget = 0.5f;
-        
-        private NavMeshAgent agent;
-        private Vector3 targetPoint;
-        private bool isMoving;
+        [SerializeField] private float moveSpeed;
+        private float distanceToTarget = 0.3f;
+        private Rigidbody rb;
 
         public TriggerHandler TriggerHandler => triggerHandler;
 
-        private void Start()
+        private void Awake()
         {
-            agent = GetComponent<NavMeshAgent>();
-            agent.autoBraking = false;
+            rb = GetComponent<Rigidbody>();
         }
 
-        public void MoveToPoint(Vector3 point)
+        public void OnReset() 
         {
-            targetPoint = point;
-            agent.SetDestination(targetPoint);
-            isMoving = true;
+            StopAllCoroutines();
+            animationController.SetIdleAnimation();
+            transform.position = Vector3.zero;
+            transform.rotation = Quaternion.identity;
         }
 
-        private void Update()
+        public void MoveTo(Vector3 target)
         {
-            if (isMoving && Vector3.Distance(targetPoint, transform.position) <= distanceToTarget)
+            StopAllCoroutines();
+            transform.LookAt(target);
+            animationController.SetRunAnimation();
+            StartCoroutine(MoveCor(target, () => animationController.SetIdleAnimation()));
+        }
+
+        private IEnumerator MoveCor(Vector3 target, System.Action stopMove)
+        {
+            while (Vector3.Distance(transform.position, target) > distanceToTarget)
             {
-                isMoving = false;
-                agent.ResetPath();
+                var direction = target - transform.position;
+                var moveVector = new Vector3(direction.x, 0f, direction.z);
+                rb.MovePosition(transform.position + moveVector * moveSpeed * Time.deltaTime);
+                yield return new WaitForFixedUpdate();
             }
+
+            stopMove?.Invoke();
         }
     }
 }

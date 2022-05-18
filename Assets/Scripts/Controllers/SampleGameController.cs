@@ -30,10 +30,17 @@ namespace Assets.Scripts.Controllers
             enemyFactory.Init(levelInfo.EnemyAmount,
                 levelInfo.MaxEnemyAmount, levelInfo.SpawnEnemyTimeValues);
 
+            enemyFactory.DidDamage = OnDamage;
             obstacleFactory.Init(levelInfo.AmountObstacles);
         }
 
-        protected override void OnRestartLevel(){}
+        protected override void OnRestartLevel()
+        {
+            character.OnReset();
+            overlayUI.SetHealt(levelInfo.PlayerHP);
+            overlayUI.ChangeBonusCount(0);
+            overlayUI.ChangeEnemyCount(0);
+        }
 
         protected override void BeforeDestroy()
         {
@@ -47,7 +54,21 @@ namespace Assets.Scripts.Controllers
             var ray = Camera.main.ScreenPointToRay(value);
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask))
             {
-                character.MoveToPoint(hit.point);
+                character.MoveTo(hit.point);
+            }
+        }
+
+        private void OnDamage()
+        {
+            var hp = overlayUI.CurrentHPCount;
+            if (--hp > 0)
+            {
+                overlayUI.SetHealt(hp);
+                overlayUI.ChangeEnemyCount(overlayUI.CurrentEnemyCount + 1);
+            }
+            else
+            {
+                OnRestartLevel();
             }
         }
 
@@ -56,19 +77,17 @@ namespace Assets.Scripts.Controllers
             var monoBehavior = other.gameObject.GetComponent<MonoBehaviour>();
             if (monoBehavior && monoBehavior is IInteractiveItem item)
             {
-                Test(item);
+                DefineAction(item);
             }
         }
 
-        private void Test(IInteractiveItem item)
+        private void DefineAction(IInteractiveItem item)
         {
             switch (item.GetItemType)
             {
                 case Common.Enums.ItemType.Bonus:
                     overlayUI.ChangeBonusCount(overlayUI.CurrentBonusCount + 1);
                     item.DestroyMy();
-                    break;
-                case Common.Enums.ItemType.Enemy:
                     break;
             }
         }
