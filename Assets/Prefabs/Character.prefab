@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 5888737542340567030}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
+  m_LocalScale: {x: 1.75, y: 1.75, z: 1.75}
   m_Children:
   - {fileID: 6344478108887307488}
   - {fileID: 7650972853349412291}
@@ -79,7 +79,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animationController: {fileID: 1687843933744002976}
   triggerHandler: {fileID: 7667518338760569775}
-  moveSpeed: 1
+  moveSpeed: 2.5
+  rotateSpeed: 210
 --- !u!1 &6801322904850731543
 GameObject:
   m_ObjectHideFlags: 0

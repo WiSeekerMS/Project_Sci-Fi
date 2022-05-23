@@ -18,7 +18,7 @@ namespace Assets.Scripts.Platform
 
         [Header("> Platform Options <")]
         [SerializeField] private Vector2Int platformSize;
-        [SerializeField, Range(0f, 1f)] private float itemSize = 1f;
+        [SerializeField] private Vector3 itemScale = Vector3.one;
 
         public void Create()
         {
@@ -38,8 +38,8 @@ namespace Assets.Scripts.Platform
             RemovePlatform();
             var startPosition = new Vector3
             {
-                x = itemSize - platformSize.x / 2f,
-                z = itemSize - platformSize.y / 2f
+                x = itemScale.x - platformSize.x / 2f,
+                z = itemScale.z - platformSize.y / 2f
             };
 
             var list = CreatePlatform(startPosition);
@@ -74,7 +74,7 @@ namespace Assets.Scripts.Platform
         private void ResetPlatformParam(List<PlatformItem> itemsList)
         {
             var offsetVector = (itemsList.First().Position + itemsList.Last().Position) / 2f;
-            var yOffset = itemSize / 2f;
+            var yOffset = itemScale.y / 2f;
             var position = transform.position;
 
             transform.position = new Vector3
@@ -89,7 +89,13 @@ namespace Assets.Scripts.Platform
                 boxCollider = GetComponent<BoxCollider>();
             }
 
-            boxCollider.size = new Vector3(platformSize.x * itemSize, itemSize, platformSize.y * itemSize);
+            boxCollider.size = new Vector3
+            {
+                x = platformSize.x * itemScale.x,
+                y = itemScale.y,
+                z = platformSize.y * itemScale.z
+            };
+
             boxCollider.center = new Vector3
             {
                 x = offsetVector.x,
@@ -108,14 +114,13 @@ namespace Assets.Scripts.Platform
                 {
                     var offsetVector = new Vector3
                     {
-                        x = x * itemSize,
-                        z = z * itemSize
+                        x = x * itemScale.x,
+                        z = z * itemScale.z
                     };
 
                     var item = Instantiate(itemPrefab, transform);
-                    item.gameObject.isStatic = true;
                     item.transform.position = startPosition + offsetVector;
-                    item.transform.localScale = Vector3.one * itemSize;
+                    item.transform.localScale = itemScale;
                     itemsList.Add(item);
                 }
             }

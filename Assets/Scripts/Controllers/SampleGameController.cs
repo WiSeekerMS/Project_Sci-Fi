@@ -1,6 +1,7 @@
 using Assets.Scripts.BaseClasses;
 using Assets.Scripts.Factories;
 using Assets.Scripts.Interfaces;
+using Scripts.Common;
 using UnityEngine;
 
 namespace Assets.Scripts.Controllers
@@ -12,7 +13,8 @@ namespace Assets.Scripts.Controllers
         [SerializeField] private BonusesFactory bonusesFactory;
         [SerializeField] private EnemyFactory enemyFactory;
         [SerializeField] private ObstacleFactory obstacleFactory;
-        
+        private TapEffect tapEffect;
+
         protected override void OnAwake()
         {
             if (inputManager) inputManager.TapPosition += OnTap;
@@ -24,14 +26,14 @@ namespace Assets.Scripts.Controllers
         {
             overlayUI.SetHealt(levelInfo.PlayerHP);
 
-            bonusesFactory.Init(levelInfo.StartAmountBonuses,
-                levelInfo.MaxAmountBonuses, levelInfo.SpawnBonusesTimeValues);
+            //bonusesFactory.Init(levelInfo.StartAmountBonuses,
+            //    levelInfo.MaxAmountBonuses, levelInfo.SpawnBonusesTimeValues);
 
-            enemyFactory.Init(levelInfo.EnemyAmount,
-                levelInfo.MaxEnemyAmount, levelInfo.SpawnEnemyTimeValues);
+            //enemyFactory.Init(levelInfo.EnemyAmount,
+            //    levelInfo.MaxEnemyAmount, levelInfo.SpawnEnemyTimeValues);
 
-            enemyFactory.DidDamage = OnDamage;
-            obstacleFactory.Init(levelInfo.AmountObstacles);
+            //enemyFactory.DidDamage = OnDamage;
+            //obstacleFactory.Init(levelInfo.AmountObstacles);
         }
 
         protected override void OnRestartLevel()
@@ -54,6 +56,13 @@ namespace Assets.Scripts.Controllers
             var ray = Camera.main.ScreenPointToRay(value);
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity, layerMask))
             {
+                if (!tapEffect)
+                {
+                    var tapEffectPrefab = (GameObject)Resources.Load("TapEffect");
+                    tapEffect = Instantiate(tapEffectPrefab).GetComponent<TapEffect>();
+                }
+
+                tapEffect.SetPosition = hit.point;
                 character.MoveTo(hit.point);
             }
         }

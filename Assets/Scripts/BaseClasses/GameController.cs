@@ -8,7 +8,6 @@ namespace Assets.Scripts.BaseClasses
     {
         [SerializeField] protected Platform.Platform platform;
         [SerializeField] protected LevelInfo_SO levelInfo;
-        [SerializeField] private OverlayUI overlayUIPrefab;
         protected InputManager inputManager;
         protected OverlayUI overlayUI;
 
@@ -21,7 +20,8 @@ namespace Assets.Scripts.BaseClasses
         {
             platform.Ready += OnPlatformReady;
             inputManager = InputManager.Instance;
-            overlayUI = Instantiate(overlayUIPrefab);
+            var overlayUIPrefab = (GameObject)Resources.Load("UI/OverlayUI");
+            overlayUI = Instantiate(overlayUIPrefab).GetComponent<OverlayUI>();
             OnAwake();
         }
 

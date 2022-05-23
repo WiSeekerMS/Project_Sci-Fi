@@ -10,7 +10,9 @@ namespace Assets.Scripts.Controllers
         [SerializeField] private CharacterAnimation animationController;
         [SerializeField] private TriggerHandler triggerHandler;
         [SerializeField] private float moveSpeed;
-        private float distanceToTarget = 0.3f;
+        [SerializeField] private float rotateSpeed;
+        private float distanceToTarget = 0.1f;
+        private float maxDegreeForRotation = 120f;
         private Rigidbody rb;
 
         public TriggerHandler TriggerHandler => triggerHandler;
@@ -24,6 +26,8 @@ namespace Assets.Scripts.Controllers
         {
             StopAllCoroutines();
             animationController.SetIdleAnimation();
+            
+            rb.velocity = Vector3.zero;
             transform.position = Vector3.zero;
             transform.rotation = Quaternion.identity;
         }
@@ -31,22 +35,47 @@ namespace Assets.Scripts.Controllers
         public void MoveTo(Vector3 target)
         {
             StopAllCoroutines();
-            transform.LookAt(target);
-            animationController.SetRunAnimation();
-            StartCoroutine(MoveCor(target, () => animationController.SetIdleAnimation()));
+            rb.velocity = Vector3.zero;
+            StartCoroutine(MoveToCor(target));
         }
 
-        private IEnumerator MoveCor(Vector3 target, System.Action stopMove)
+        private IEnumerator MoveToCor(Vector3 target)
         {
-            while (Vector3.Distance(transform.position, target) > distanceToTarget)
+            //animationController.SetTurnLeftAnimation();
+            yield return RotateCor(target);
+            animationController.SetRunAnimation();
+            
+            yield return MoveCor(target);
+            animationController.SetIdleAnimation();
+        }
+
+        private IEnumerator RotateCor(Vector3 target) 
+        {
+            Vector3 relativePos = target - transform.position;
+            var to = Quaternion.LookRotation(relativePos);
+            var angle = Quaternion.Angle(transform.rotation, to);
+
+            if(angle > maxDegreeForRotation)
             {
-                var direction = target - transform.position;
-                var moveVector = new Vector3(direction.x, 0f, direction.z);
-                rb.MovePosition(transform.position + moveVector * moveSpeed * Time.deltaTime);
-                yield return new WaitForFixedUpdate();
+                transform.LookAt(target);
+                yield break;
             }
 
-            stopMove?.Invoke();
+            while (Mathf.Abs(Quaternion.Dot(transform.rotation, to)) < 0.999999f)
+            {
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, to, 
+                    rotateSpeed * Time.deltaTime);
+                yield return null;
+            }
+        }
+
+        private IEnumerator MoveCor(Vector3 target)
+        {
+            rb.velocity = transform.forward * moveSpeed;
+            while (Vector3.Distance(transform.position, target) > distanceToTarget)
+                yield return null;
+
+            rb.velocity = Vector3.zero;
         }
     }
 }

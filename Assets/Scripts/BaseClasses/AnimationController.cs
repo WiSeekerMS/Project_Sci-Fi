@@ -16,5 +16,10 @@ namespace Assets.Scripts.BaseClasses
         {
             if (animator) animator.SetBool(id, value);
         }
+
+        protected void SetAnimation(int id)
+        {
+            if (animator) animator.SetTrigger(id);
+        }
     }
 }
